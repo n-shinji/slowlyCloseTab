@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE overlay SYSTEM "chrome://slowlyCloseTab/locale/slowlyCloseTab.dtd" >
+
+<overlay id="slowlyCloseTabOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/x-javascript" src="chrome://slowlyCloseTab/content/slowlyCloseTab.js">
+</script>
+
+<popupset id="mainPopupSet">
+  <menupopup id="slowlyCloseTabPopup">
+    <menuitem id="removeleftmenu" oncommand="slowlyCloseTab.removeLeft(true);"
+              label="&slowlyCloseTab.removeleft;" accesskey="&slowlyCloseTab.removeleft.key;"/>
+    <menuitem id="removerightmenu" oncommand="slowlyCloseTab.removeRight(true);"
+              label="&slowlyCloseTab.removeright;" accesskey="&slowlyCloseTab.removeright.key;"/>
+    <menuitem id="removeallmenu" oncommand="slowlyCloseTab.removeAll(true);"
+              label="&slowlyCloseTab.removeall;" accesskey="&slowlyCloseTab.removeall.key;"/>
+  </menupopup>
+</popupset>
+
+</overlay>
+

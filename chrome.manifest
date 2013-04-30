@@ -1,0 +1,9 @@
+overlay	chrome://browser/content/browser.xul	chrome://slowlyCloseTab/content/slowlyCloseTabOverlay.xul
+content	slowlyCloseTab	content/
+
+skin	slowlyCloseTab	classic	skin/classic/
+style	chrome://browser/content/browser.xul	chrome://slowlyCloseTab/skin/slowlyCloseTab.css
+style	chrome://global/content/customizeToolbar.xul	chrome://slowlyCloseTab/skin/slowlyCloseTab.css
+
+locale	slowlyCloseTab	ja	locale/ja/
+

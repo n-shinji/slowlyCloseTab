@@ -1,0 +1,26 @@
+<!ENTITY slowlyCloseTab.removeleft  "左側のタブをまとめてゆっくり閉じる">
+<!ENTITY slowlyCloseTab.removeright "右側のタブをまとめてゆっくり閉じる">
+<!ENTITY slowlyCloseTab.removeall   "すべてのタブをゆっくり閉じる">
+
+<!ENTITY slowlyCloseTab.removeleft.key  "L">
+<!ENTITY slowlyCloseTab.removeright.key "R">
+<!ENTITY slowlyCloseTab.removeother.key "O">
+<!ENTITY slowlyCloseTab.removeall.key   "A">
+
+<!ENTITY slowlyCloseTab.removeleft.button  "左を閉じる">
+<!ENTITY slowlyCloseTab.removeleft.tooltip  "左を閉じる">
+<!ENTITY slowlyCloseTab.removeother.button  "他をゆっくり閉じる">
+<!ENTITY slowlyCloseTab.removeother.tooltip  "他を閉じる">
+<!ENTITY slowlyCloseTab.removeright.button  "右を閉じる">
+<!ENTITY slowlyCloseTab.removeright.tooltip  "右を閉じる">
+<!ENTITY slowlyCloseTab.removeall.button  "全て閉じる">
+<!ENTITY slowlyCloseTab.removeall.tooltip  "全て閉じる">
+
+<!ENTITY slowlyCloseTab.setting.title "slowlyCloseTab の設定">
+<!ENTITY slowlyCloseTab.setting.contextmenu "タブのコンテキストメニュー:">
+<!ENTITY slowlyCloseTab.setting.when_removeall "全て閉じた時の動作:">
+<!ENTITY slowlyCloseTab.setting.show.blank "空白ページを表示する">
+<!ENTITY slowlyCloseTab.setting.show.homepage "ホームページを表示する">
+<!ENTITY slowlyCloseTab.setting.show.url "指定した URL を開く:">
+<!ENTITY slowlyCloseTab.setting.ms.text "次のタブを閉じるまでのミリ秒数">
+<!ENTITY slowlyCloseTab.setting.ms.ms "ミリ秒">

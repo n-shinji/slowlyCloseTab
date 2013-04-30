@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!DOCTYPE prefwindow SYSTEM "chrome://slowlyCloseTab/locale/slowlyCloseTab.dtd" >
+
+<prefwindow id="slowlyCloseTabPrefs"
+	title="&slowlyCloseTab.setting.title;"
+	ondialogaccept="return slowlyCloseTab_setting.accept();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<prefpane id="slowlyCloseTabPrefPane" label="General">
+		<preferences>
+			<preference id="extensions.slowlyCloseTab.add_removeleft_menu"
+				name="extensions.slowlyCloseTab.add_removeleft_menu"
+				type="bool" />
+			<preference id="extensions.slowlyCloseTab.add_removeright_menu"
+				name="extensions.slowlyCloseTab.add_removeright_menu"
+				type="bool" />
+			<preference id="extensions.slowlyCloseTab.add_removeall_menu"
+				name="extensions.slowlyCloseTab.add_removeall_menu"
+				type="bool" />
+			<preference id="extensions.slowlyCloseTab.removeall_type"
+				name="extensions.slowlyCloseTab.removeall_type"
+				type="int" />
+			<preference id="extensions.slowlyCloseTab.removeall_url"
+				name="extensions.slowlyCloseTab.removeall_url"
+				type="string" />
+			<preference id="extensions.slowlyCloseTab.remove_time"
+				name="extensions.slowlyCloseTab.remove_time"
+				type="int" />
+		</preferences>
+		<groupbox>
+			<caption label="&slowlyCloseTab.setting.contextmenu;" />
+			<checkbox label="&slowlyCloseTab.removeleft;"
+				preference="extensions.slowlyCloseTab.add_removeleft_menu" />
+			<checkbox label="&slowlyCloseTab.removeright;"
+				preference="extensions.slowlyCloseTab.add_removeright_menu" />
+			<checkbox label="&slowlyCloseTab.removeall;"
+				preference="extensions.slowlyCloseTab.add_removeall_menu" />
+		</groupbox>
+		<groupbox>
+			<caption label="&slowlyCloseTab.setting.when_removeall;" />
+			<radiogroup preference="extensions.slowlyCloseTab.removeall_type">
+				<radio value="0" label="&slowlyCloseTab.setting.show.blank;" />
+				<radio value="1" label="&slowlyCloseTab.setting.show.homepage;" />
+				<radio value="2" label="&slowlyCloseTab.setting.show.url;" />
+			</radiogroup>
+			<hbox align="center">
+				<spacer style="width: 32px;"/>
+				<textbox preference="extensions.slowlyCloseTab.removeall_url" flex="1"/>
+			</hbox>
+		</groupbox>
+
+		<groupbox>
+			<caption label="&slowlyCloseTab.setting.ms.text;" />
+			<hbox align="center">
+				<spacer style="width: 12px;"/>
+				<textbox preference="extensions.slowlyCloseTab.remove_time" flex="1" type="number" />
+				<label id="slowlyCloseTab-ms">&slowlyCloseTab.setting.ms.ms;</label>
+			</hbox>
+		</groupbox>
+
+	</prefpane>
+
+	<script type="application/x-javascript" src="chrome://slowlyCloseTab/content/settings.js" />
+	<script type="application/x-javascript" src="chrome://slowlyCloseTab/content/slowlyCloseTab.js" />
+</prefwindow>

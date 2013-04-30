@@ -1,0 +1,12 @@
+/*
+knamespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+*/
+
+#tabbrowser-tabs .tabbrowser-tab[removeTabCheck="1"] .tab-close-button { display: none !important; }
+
+#tabbrowser-tabs .tabbrowser-tab[removeTabCheck="1"] {
+	min-width: 27px !important;
+	max-width: 27px !important;
+	overflow: hidden !important;
+}
+
