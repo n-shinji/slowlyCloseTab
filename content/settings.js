@@ -14,6 +14,7 @@ var slowlyCloseTab_setting = {
 	removeMenuItem : function(browser) {
 		slowlyCloseTab_setting.removeElement(browser, "tab-removeleftmenu");
 		slowlyCloseTab_setting.removeElement(browser, "tab-removerightmenu");
+		slowlyCloseTab_setting.removeElement(browser, "tab-removeothermenu");
 		slowlyCloseTab_setting.removeElement(browser, "tab-removeallmenu");
 	},
 	

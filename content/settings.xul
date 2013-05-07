@@ -18,6 +18,9 @@
 			<preference id="extensions.slowlyCloseTab.add_removeall_menu"
 				name="extensions.slowlyCloseTab.add_removeall_menu"
 				type="bool" />
+			<preference id="extensions.slowlyCloseTab.add_removeother_menu"
+				name="extensions.slowlyCloseTab.add_removeother_menu"
+				type="bool" />
 			<preference id="extensions.slowlyCloseTab.removeall_type"
 				name="extensions.slowlyCloseTab.removeall_type"
 				type="int" />
@@ -34,6 +37,8 @@
 				preference="extensions.slowlyCloseTab.add_removeleft_menu" />
 			<checkbox label="&slowlyCloseTab.removeright;"
 				preference="extensions.slowlyCloseTab.add_removeright_menu" />
+			<checkbox label="&slowlyCloseTab.removeother;"
+				preference="extensions.slowlyCloseTab.add_removeother_menu" />
 			<checkbox label="&slowlyCloseTab.removeall;"
 				preference="extensions.slowlyCloseTab.add_removeall_menu" />
 		</groupbox>

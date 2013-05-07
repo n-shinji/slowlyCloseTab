@@ -34,8 +34,16 @@ var slowlyCloseTab = {
 		}
 	},
 
+	removeTabCheck : function( tabs ){
+		if( tabs.getAttribute( slowlyCloseTab._removeTab ) != '1' ){
+			tabs.setAttribute( slowlyCloseTab._removeTab, '1' );
+			slowlyCloseTab._removeTabCount++;
+		}
+		return tabs;
+	},
+
 	removeLeft : function(usecontext) {
-		var ctab = (usecontext ? gBrowser.mContextTab : gBrowser.selectedTab);
+		var ctab = slowlyCloseTab.getCtabs(usecontext);
 		if(slowlyCloseTab.isRTL()){
 			slowlyCloseTab.removeAfter(ctab);
 		}else{
@@ -45,7 +53,7 @@ var slowlyCloseTab = {
 	},
 	
 	removeRight : function(usecontext) {
-		var ctab = (usecontext ? gBrowser.mContextTab : gBrowser.selectedTab);
+		var ctab = slowlyCloseTab.getCtabs(usecontext);
 		if(slowlyCloseTab.isRTL()){
 			slowlyCloseTab.removeBefore(ctab);
 		}else{
@@ -53,25 +61,14 @@ var slowlyCloseTab = {
 		}
 		slowlyCloseTab.removeAction();
 	},
-
-	removeTabCheck : function( tabs ){
-		if( tabs.getAttribute( slowlyCloseTab._removeTab ) != '1' ){
-			tabs.setAttribute( slowlyCloseTab._removeTab, '1' );
-			slowlyCloseTab._removeTabCount++;
-		}
-		return tabs;
-	},
 	
 	removeBefore : function(ctab) {
 		var tabs = slowlyCloseTab.getTabs();
-		var i;
-		for(i=tabs.length-1; tabs[i] != ctab; i--){}
-		for(i--; i>=0; i--){
+		for( var i = 0, len = tabs.length; tabs[i] != ctab; i++){
 			if(!tabs[i].pinned){
 				slowlyCloseTab.removeTabCheck(tabs[i]);
 			}
 		}
-		// slowlyCloseTab.updateEnabled();
 	},
 	
 	removeAfter : function(ctab) {
@@ -81,27 +78,37 @@ var slowlyCloseTab = {
 				slowlyCloseTab.removeTabCheck(tabs[i]);
 			}
 		}
-		// slowlyCloseTab.updateEnabled();
 	},
-	
-	removeAll : function(usecontext) {
+
+	removeOther : function(usecontext){
 		var tabs = slowlyCloseTab.getTabs();
-		for(var i=0; tabs.length > i; i++ ){
+		var ctab = slowlyCloseTab.getCtabs(usecontext);
+		for( var i = 0, len = tabs.length; len > i; i++ ){
+			if( ctab != tabs[i] ){
+				slowlyCloseTab.removeTabCheck(tabs[i]);
+			}
+		}
+		slowlyCloseTab.removeAction();
+	},
+
+	removeAll : function() {
+		var tabs = slowlyCloseTab.getTabs();
+		for(var i=0,len = tabs.length; len > i; i++ ){
 			if(!tabs[i].pinned){
 				slowlyCloseTab.removeTabCheck(tabs[i]);
 			}
 		}
-		if( tabs.length == 1 ){
-			gBrowser.addTab(slowlyCloseTab.getRemoveAllPage());
-		}
 		slowlyCloseTab.removeAction();
-		// slowlyCloseTab.updateEnabled();
 	},
-	
-	getRemoveAllPage : function() {
-		var prefSvc = Components.classes["@mozilla.org/preferences-service;1"]
+
+	getExtensionsData : function(){
+		var cc = Components.classes["@mozilla.org/preferences-service;1"]
 			.getService(Components.interfaces.nsIPrefService);
-		var prefBranch = prefSvc.getBranch("extensions.slowlyCloseTab.");
+		return cc.getBranch("extensions.slowlyCloseTab.");
+	},
+
+	getRemoveAllPage : function() {
+		var prefBranch = slowlyCloseTab.getExtensionsData();
 	
 		switch(prefBranch.getIntPref("removeall_type")) {
 		case 0:
@@ -116,9 +123,7 @@ var slowlyCloseTab = {
 	},
 
 	getRemoveTime : function(){
-		var prefSvc = Components.classes["@mozilla.org/preferences-service;1"]
-			.getService(Components.interfaces.nsIPrefService);
-		var prefBranch = prefSvc.getBranch("extensions.slowlyCloseTab.");
+		var prefBranch = slowlyCloseTab.getExtensionsData();
 		return prefBranch.getIntPref("remove_time");
 	},
 
@@ -127,36 +132,46 @@ var slowlyCloseTab = {
 		if(item == null){ return; }
 		item.setAttribute("disabled", value);
 	},
-	
+
+	getmContextTab : function(tabs){
+		var a = slowlyCloseTab.getCtabs(true);
+		for( var i = 0, len = tabs.length; len > i; i++ ){
+			if( a == tabs[i] ){
+				return i;
+				break;
+			}
+		}
+		return false;
+	},
+
 	updateEnabled : function(e) {
 		var tabs = slowlyCloseTab.getTabs();
+		var c = slowlyCloseTab.getmContextTab(tabs);
 		if(slowlyCloseTab.isRTL()){
-			slowlyCloseTab.updateEnabled_rtl(tabs);
+			slowlyCloseTab.updateEnabled_rtl(tabs,c);
 		}else{
-			slowlyCloseTab.updateEnabled_ltr(tabs);
+			slowlyCloseTab.updateEnabled_ltr(tabs,c);
 		}
 		var removeallDisabled = tabs.length == gBrowser._numPinnedTabs ||
 			(tabs.length <= 1 &&
 			 (gBrowser.currentURI.spec == "" || gBrowser.currentURI.spec == "about:blank"));
 		slowlyCloseTab.setDisabled("tab-removeallmenu", removeallDisabled);
 	},
-	
-	updateEnabled_ltr : function(tabs) {
-		var cpos = (gBrowser.mContextTab ? gBrowser.mContextTab._tPos : 0);
-		var spos = gBrowser.selectedTab._tPos;
+
+	updateEnabled_ltr : function(tabs,c) {
 		var pinned = gBrowser._numPinnedTabs || 0; // "|| 0" for Firefox 3.6
-		slowlyCloseTab.setDisabled("tab-removeleftmenu",  (cpos <= pinned));
-		slowlyCloseTab.setDisabled("tab-removerightmenu", (cpos < pinned || cpos == tabs.length - 1));
+		slowlyCloseTab.setDisabled("tab-removeleftmenu",  (c <= pinned));
+		slowlyCloseTab.setDisabled("tab-removerightmenu", (c < pinned || c == tabs.length - 1));
+		slowlyCloseTab.setDisabled("tab-removeothermenu", ( gBrowser.mContextTab.pinned || tabs.length - pinned <= 1 ) );
 	},
-	
-	updateEnabled_rtl : function(tabs) {
-		var cpos = (gBrowser.mContextTab ? gBrowser.mContextTab._tPos : 0);
-		var spos = gBrowser.selectedTab._tPos;
+
+	updateEnabled_rtl : function(tabs,c) {
 		var pinned = gBrowser._numPinnedTabs || 0; // "|| 0" for Firefox 3.6
-		slowlyCloseTab.setDisabled("tab-removeleftmenu",  (cpos < pinned || cpos == tabs.length - 1));
-		slowlyCloseTab.setDisabled("tab-removerightmenu", (cpos <= pinned));
+		slowlyCloseTab.setDisabled("tab-removeleftmenu",  (c < pinned || c == tabs.length - 1));
+		slowlyCloseTab.setDisabled("tab-removerightmenu", (c <= pinned));
+		slowlyCloseTab.setDisabled("tab-removeothermenu", ( gBrowser.mContextTab.pinned || tabs.length - pinned <= 1 ) );
 	},
-	
+
 	addMenuItem : function(browser, menuid) {
 		if(!browser){ return; }
 		var slowlyCloseTabMenu = browser.ownerDocument.getElementById(menuid).cloneNode(false);
@@ -172,15 +187,16 @@ var slowlyCloseTab = {
 	},
 	
 	addMenuItems : function(browser) {
-		var prefSvc = Components.classes["@mozilla.org/preferences-service;1"]
-			.getService(Components.interfaces.nsIPrefService);
-		var prefBranch = prefSvc.getBranch("extensions.slowlyCloseTab.");
+		var prefBranch = slowlyCloseTab.getExtensionsData();
 	
 		if(prefBranch.getBoolPref("add_removeleft_menu")) {
 			slowlyCloseTab.addMenuItem(browser, "removeleftmenu");
 		}
 		if(prefBranch.getBoolPref("add_removeright_menu")) {
 			slowlyCloseTab.addMenuItem(browser, "removerightmenu");
+		}
+		if(prefBranch.getBoolPref("add_removeother_menu")) {
+			slowlyCloseTab.addMenuItem(browser, "removeothermenu");
 		}
 		if(prefBranch.getBoolPref("add_removeall_menu")) {
 			slowlyCloseTab.addMenuItem(browser, "removeallmenu");
@@ -193,17 +209,16 @@ var slowlyCloseTab = {
 		var menuParent = slowlyCloseTab.getTabContextMenu(gBrowser);
 		menuParent.addEventListener("popupshowing", slowlyCloseTab.updateEnabled, false);
 
-		if( typeof gBrowser.tabContainer !== 'undefined' ){
-			var container = gBrowser.tabContainer;
-			container.addEventListener("TabClose", slowlyCloseTab.tabRemoveEvent, false);
-		}
-
-		slowlyCloseTab.updateEnabled();
+		gBrowser.tabContainer.addEventListener("TabClose", slowlyCloseTab.tabRemoveEvent, false);
 	},
-	
+
 	getTabs : function() {
 		// "visibleTabs" was introduced in Firefox 4.0.
 		return gBrowser.visibleTabs || gBrowser.tabContainer.childNodes;
+	},
+
+	getCtabs : function(usecontext){
+		return (usecontext ? gBrowser.mContextTab : gBrowser.selectedTab);
 	},
 
 	getTabContextMenu : function(browser) {
@@ -246,7 +261,7 @@ var slowlyCloseTab = {
 		var tabs = slowlyCloseTab.getTabs();
 		var countS = 0;
 		slowlyCloseTab._removeTabCount = 0;
-		for( var i = 0; tabs.length > i; i++ ){
+		for( var i = 0, len = tabs.length; len > i; i++ ){
 			var a = tabs[i].getAttribute( slowlyCloseTab._removeTab );
 			if( a == '1' ){
 				slowlyCloseTab._removeTabCount++;
@@ -260,8 +275,13 @@ var slowlyCloseTab = {
 		if( tabs.length == countS ){
 			gBrowser.addTab(slowlyCloseTab.getRemoveAllPage());
 		}
+	},
+
+	d : function(){
+		slowlyCloseTab = void 0;
 	}
 };
 
-window.addEventListener('load', slowlyCloseTab.init, false);
+window.addEventListener('load', function(){ slowlyCloseTab.init(); }, false);
+window.addEventListener('unload', function(){ slowlyCloseTab.d(); }, false);
 
