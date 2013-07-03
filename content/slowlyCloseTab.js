@@ -35,6 +35,9 @@ var slowlyCloseTab = {
 	},
 
 	removeTabCheck : function( tabs ){
+		if(tabs.pinned){
+			return tabs;
+		}
 		if( tabs.getAttribute( slowlyCloseTab._removeTab ) != '1' ){
 			tabs.setAttribute( slowlyCloseTab._removeTab, '1' );
 			slowlyCloseTab._removeTabCount++;
@@ -65,18 +68,14 @@ var slowlyCloseTab = {
 	removeBefore : function(ctab) {
 		var tabs = slowlyCloseTab.getTabs();
 		for( var i = 0, len = tabs.length; tabs[i] != ctab; i++){
-			if(!tabs[i].pinned){
-				slowlyCloseTab.removeTabCheck(tabs[i]);
-			}
+			slowlyCloseTab.removeTabCheck(tabs[i]);
 		}
 	},
 	
 	removeAfter : function(ctab) {
 		var tabs = slowlyCloseTab.getTabs();
 		for(var i=tabs.length-1; tabs[i] != ctab; i--){
-			if(!tabs[i].pinned){
-				slowlyCloseTab.removeTabCheck(tabs[i]);
-			}
+			slowlyCloseTab.removeTabCheck(tabs[i]);
 		}
 	},
 
@@ -94,9 +93,7 @@ var slowlyCloseTab = {
 	removeAll : function() {
 		var tabs = slowlyCloseTab.getTabs();
 		for(var i=0,len = tabs.length; len > i; i++ ){
-			if(!tabs[i].pinned){
-				slowlyCloseTab.removeTabCheck(tabs[i]);
-			}
+			slowlyCloseTab.removeTabCheck(tabs[i]);
 		}
 		slowlyCloseTab.removeAction();
 	},
