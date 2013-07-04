@@ -35,7 +35,7 @@ var slowlyCloseTab = {
 	},
 
 	removeTabCheck : function( tabs ){
-		if(tabs.pinned){
+		if(tabs.pinned || tabs.getAttribute( 'locked' ) || tabs.getAttribute( '_locked' ) ){
 			return tabs;
 		}
 		if( tabs.getAttribute( slowlyCloseTab._removeTab ) != '1' ){
