@@ -7,7 +7,7 @@ xmlns:em="http://www.mozilla.org/2004/em-rdf#">
 
 		<em:id>{43F4347A-11C8-458f-8DD6-08107F863F63}</em:id>
 		<em:name>ゆっくりタブを閉じる</em:name>
-		<em:version>0.1.0.0</em:version>
+		<em:version>0.1.1</em:version>
 		<em:type>2</em:type>
 		<em:description>タブをゆっくり閉じます。</em:description>
 		<em:creator>shinji</em:creator>
