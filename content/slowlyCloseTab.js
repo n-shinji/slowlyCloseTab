@@ -142,7 +142,6 @@ var slowlyCloseTab = {
 	},
 
 	updateEnabled : function(e) {
-		slowlyCloseTabLog( "aaa" );
 		var tabs = slowlyCloseTab.getTabs();
 		var c = slowlyCloseTab.getmContextTab(tabs);
 		if(slowlyCloseTab.isRTL()){
