@@ -9,15 +9,19 @@
 </script>
 
 <popupset id="mainPopupSet">
-  <menupopup id="slowlyCloseTabPopup">
-    <menuitem id="removeleftmenu" oncommand="slowlyCloseTab.removeLeft(true);"
-              label="&slowlyCloseTab.removeleft;" accesskey="&slowlyCloseTab.removeleft.key;"/>
-    <menuitem id="removerightmenu" oncommand="slowlyCloseTab.removeRight(true);"
-              label="&slowlyCloseTab.removeright;" accesskey="&slowlyCloseTab.removeright.key;"/>
-    <menuitem id="removeothermenu" oncommand="slowlyCloseTab.removeOther(true);"
-              label="&slowlyCloseTab.removeother;" accesskey="&slowlyCloseTab.removeother.key;"/>
-    <menuitem id="removeallmenu" oncommand="slowlyCloseTab.removeAll(true);"
-              label="&slowlyCloseTab.removeall;" accesskey="&slowlyCloseTab.removeall.key;"/>
+  <menupopup id="tabContextMenu">
+    <menuitem id="tab-removeallmenu" oncommand="slowlyCloseTab.removeAll(true);"
+              label="&slowlyCloseTab.removeall;" accesskey="&slowlyCloseTab.removeall.key;"
+			  insertafter="context_closeOtherTabs" />
+    <menuitem id="tab-removeothermenu" oncommand="slowlyCloseTab.removeOther(true);"
+              label="&slowlyCloseTab.removeother;" accesskey="&slowlyCloseTab.removeother.key;"
+			  insertafter="context_closeOtherTabs" />
+    <menuitem id="tab-removerightmenu" oncommand="slowlyCloseTab.removeRight(true);"
+              label="&slowlyCloseTab.removeright;" accesskey="&slowlyCloseTab.removeright.key;"
+			  insertafter="context_closeOtherTabs" />
+    <menuitem id="tab-removeleftmenu" oncommand="slowlyCloseTab.removeLeft(true);"
+              label="&slowlyCloseTab.removeleft;" accesskey="&slowlyCloseTab.removeleft.key;"
+			  insertafter="context_closeOtherTabs" />
   </menupopup>
 </popupset>
 

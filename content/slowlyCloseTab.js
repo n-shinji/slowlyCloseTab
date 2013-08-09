@@ -142,6 +142,7 @@ var slowlyCloseTab = {
 	},
 
 	updateEnabled : function(e) {
+		slowlyCloseTabLog( "aaa" );
 		var tabs = slowlyCloseTab.getTabs();
 		var c = slowlyCloseTab.getmContextTab(tabs);
 		if(slowlyCloseTab.isRTL()){
@@ -169,35 +170,21 @@ var slowlyCloseTab = {
 		slowlyCloseTab.setDisabled("tab-removeothermenu", ( gBrowser.mContextTab.pinned || tabs.length - pinned <= 1 ) );
 	},
 
-	addMenuItem : function(browser, menuid) {
+	addMenuItem : function(browser, menuid, type) {
 		if(!browser){ return; }
-		var slowlyCloseTabMenu = browser.ownerDocument.getElementById(menuid).cloneNode(false);
-		if(!slowlyCloseTabMenu){ return; }
-		slowlyCloseTabMenu.id = "tab-" + menuid;
-		var menuParent = slowlyCloseTab.getTabContextMenu(browser);
-		var closeOtherTabsEl = document.getElementById("context_closeOtherTabs");
-		if(!closeOtherTabsEl){
-			menuParent.appendChild(slowlyCloseTabMenu);
-		}else{
-			menuParent.insertBefore(slowlyCloseTabMenu, closeOtherTabsEl);
-		}
+
+		var item = browser.ownerDocument.getElementById( menuid );
+		if(!item){ return; }
+		item.hidden = type;
 	},
 	
 	addMenuItems : function(browser) {
 		var prefBranch = slowlyCloseTab.getExtensionsData();
 	
-		if(prefBranch.getBoolPref("add_removeleft_menu")) {
-			slowlyCloseTab.addMenuItem(browser, "removeleftmenu");
-		}
-		if(prefBranch.getBoolPref("add_removeright_menu")) {
-			slowlyCloseTab.addMenuItem(browser, "removerightmenu");
-		}
-		if(prefBranch.getBoolPref("add_removeother_menu")) {
-			slowlyCloseTab.addMenuItem(browser, "removeothermenu");
-		}
-		if(prefBranch.getBoolPref("add_removeall_menu")) {
-			slowlyCloseTab.addMenuItem(browser, "removeallmenu");
-		}
+		slowlyCloseTab.addMenuItem(browser, "tab-removeleftmenu", !prefBranch.getBoolPref("add_removeleft_menu"));
+		slowlyCloseTab.addMenuItem(browser, "tab-removerightmenu", !prefBranch.getBoolPref("add_removeright_menu"));
+		slowlyCloseTab.addMenuItem(browser, "tab-removeothermenu", !prefBranch.getBoolPref("add_removeother_menu"));
+		slowlyCloseTab.addMenuItem(browser, "tab-removeallmenu", !prefBranch.getBoolPref("add_removeall_menu"));
 	},
 	
 	init : function() {
@@ -275,6 +262,10 @@ var slowlyCloseTab = {
 	},
 
 	d : function(){
+		var menuParent = slowlyCloseTab.getTabContextMenu(gBrowser);
+		menuParent.removeEventListener("popupshowing", slowlyCloseTab.updateEnabled, false);
+
+		gBrowser.tabContainer.removeEventListener("TabClose", slowlyCloseTab.tabRemoveEvent, false);
 		slowlyCloseTab = void 0;
 	}
 };
